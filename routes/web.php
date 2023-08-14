@@ -3,6 +3,8 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Models\Country;
+use App\Http\Controllers\CountryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,11 +27,20 @@ Route::get('/welcome', function () {
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    return Inertia::render('Dashboard', [
+        'countries' => Country::all()
+    ]);
+
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/', function () {
     return Redirect::to('/dashboard');
 });
+
+Route::controller(CountryController::class)->group(function () {
+    Route::post('/country', 'store')->middleware(['auth', 'verified'])->name('country');
+    Route::delete('/country/{country}', 'destroy')->middleware(['auth', 'verified'])->name('country.destroy');
+});
+
 
 require __DIR__.'/auth.php';
