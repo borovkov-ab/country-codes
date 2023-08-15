@@ -7,6 +7,9 @@ import CountryList from '@/Components/Countries/CountryList';
 export default function Dashboard(props) {
     const [editForm, setEditForm] = React.useState({});
 
+    props.fromBlockedCountry && alert('You are from blocked country');
+    console.log('Your country is ' + (props.fromBlockedCountry?'blocked':'not blocked'));
+
     return (
         <Authenticated
             auth={props.auth}

@@ -28,10 +28,11 @@ Route::get('/welcome', function () {
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard', [
-        'countries' => Country::all()
+        'countries' => Country::all(),
+        'fromBlockedCountry' => request()->countryBlockedByIp || false,
     ]);
 
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', 'blockByIp'])->name('dashboard');
 
 Route::get('/', function () {
     return Redirect::to('/dashboard');
