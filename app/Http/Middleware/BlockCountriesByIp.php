@@ -18,6 +18,11 @@ class BlockCountriesByIp
     public function handle(Request $request, Closure $next)
     {
         $requestIp = $request->ip();
+        if(in_array($requestIp, ['::1', '127.0.0.1'])) {
+            Log::debug('Local host is always accepted', [$requestIp]);
+            return $next($request);
+        }
+
         $allowedCountries = ['Israel'];//config('app.allowed_countries');
         try {
             $ipInfo = json_decode(file_get_contents("http://ip-api.com/json/{$requestIp}?fields=status,message,country,countryCode"), true);
@@ -26,14 +31,18 @@ class BlockCountriesByIp
             Log::error("Failed to get ip info for ip: {$requestIp}, error: {$e->getMessage()}");
         }
 
-        Log::debug('ip info: ', [$ipInfo]);
 
-        if(isset($ipInfo['country']) && !in_array($ipInfo['country'], $allowedCountries)) {
-            $request->countryBlockedByIp = true;
-            return $next($request);
+        $request->countryIpInfo = [
+            'info' => $ipInfo,
+            'ip' => $requestIp
+        ];
+        Log::debug('ip info: ', $request->countryIpInfo);
+
+        if(!isset($ipInfo['country']) || !in_array($ipInfo['country'], $allowedCountries)) {
+            $request->countryIpInfo['isBlocked'] = true;
+            return abort(503); //redirect('/welcome');
         }
 
-        //here we can redirect to a page that says that the site is not available in the country
         return $next($request);
     }
 }
