@@ -6,7 +6,7 @@ import { Head, Link, useForm } from '@inertiajs/inertia-react';
 import ValidationErrors from '../ValidationErrors';
 
 
-export default function Addcountry({ editForm }) {
+export default function Addcountry({ editForm, setEditForm }) {
     const { data, setData, setDefaults, post, processing, errors, reset, transform } = useForm({name: '', code: '', id: null });
 
     useEffect(() => {
@@ -21,7 +21,10 @@ export default function Addcountry({ editForm }) {
     const submit = (e) => {
         e.preventDefault();
         post(route('country'), {
-            onSuccess: () => reset('name', 'code'),
+            onSuccess: () => { 
+		    reset('name', 'code')
+		    setEditForm({id:null, name: null, code: null})
+	    },
         });
     };
 

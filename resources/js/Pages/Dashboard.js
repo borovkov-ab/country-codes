@@ -26,7 +26,7 @@ export default function Dashboard(props) {
                     <div className="max-w-7xl mx-auto basis-1/4 bg-white">
                         <div className="m-5 border">
                             <div className="bg-white overflow-hidden shadow-sm">
-                                <Addcountry editForm={editForm}/>
+                                <Addcountry editForm={editForm} setEditForm={setEditForm} />
                             </div>
                         </div>
                     </div>

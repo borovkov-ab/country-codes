@@ -8,12 +8,12 @@ use Illuminate\Http\Request;
 class CountryController extends Controller
 {
     public function store(Request $request) {
-        $request->validate([
-            'name' => 'required|unique:countries',
-            'code' => 'required|unique:countries',
-        ]);
 
         if(!$request->id){
+            $request->validate([
+               'name' => 'required|unique:countries',
+               'code' => 'required|unique:countries',
+            ]);
             $country = Country::create([
                 'name' => $request->name,
                 'code' => $request->code,
