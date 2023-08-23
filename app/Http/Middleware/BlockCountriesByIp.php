@@ -20,6 +20,10 @@ class BlockCountriesByIp
         $requestIp = $request->ip();
         if(in_array($requestIp, ['::1', '127.0.0.1'])) {
             Log::debug('Local host is always accepted', [$requestIp]);
+            $request->merge(['countryIpInfo' => [
+                'info' => ['country' => 'Israel'],
+                'ip' => $requestIp
+            ]]);
             return $next($request);
         }
 
@@ -32,11 +36,12 @@ class BlockCountriesByIp
         }
 
 
-        $request->countryIpInfo = [
+        $request->merge(['countryIpInfo' => [
             'info' => $ipInfo,
             'ip' => $requestIp
-        ];
-        Log::debug('ip info: ', $request->countryIpInfo);
+        ]]);
+
+        Log::debug('ip info: ', $request->get('countryIpInfo'));
 
         if(!isset($ipInfo['country']) || !in_array($ipInfo['country'], $allowedCountries)) {
             $request->countryIpInfo['isBlocked'] = true;

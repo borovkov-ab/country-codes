@@ -29,7 +29,7 @@ Route::get('/welcome', function () {
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard', [
         'countries' => Country::all(),
-        'countryIpInfo' => request()->countryIpInfo ?? [],
+        'countryIpInfo' => request()->get('countryIpInfo') ?? [],
     ]);
 
 })->middleware(['auth', 'verified', 'blockByIp'])->name('dashboard');
