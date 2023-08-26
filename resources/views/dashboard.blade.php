@@ -12,7 +12,7 @@
         <hr class="hr" />
         <div clas="card-body">
             <div class="d-flex justify-content-around align-content-start">
-                <div class="card my-4 mx-4 w-25">
+                <div class="card my-4 mx-4 w-25 border align-self-start">
                     <div class="card-header">
                         <h5 class="card-title">
                             @if(!$editedCountryId)
@@ -20,11 +20,9 @@
                             @endif Country
                         </h5>
                     </div>
-                    <div class="card-body">
-                        @include('countries.addform')
-                    </div>
+                      @include('countries.addform')
                 </div>
-                <div class="card my-4 mx-4 w-75">
+                <div class="card my-4 mx-4 w-75 border">
                     <div class="card-header">
                         <h5 class="card-title">Countries</h5>
                     </div>

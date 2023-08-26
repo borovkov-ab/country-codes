@@ -25,15 +25,15 @@ Route::get('/dashboard', function (Request $request) {
         //'editedCountry' => $request->country_id ? App\Models\Country::find($request->country_id) : null,
         'editedCountryId' => $request->country_id ? $request->country_id : null,
     ]);
-})->middleware(['auth'])->name('dashboard');
+})->middleware(['auth', 'blockByIp'])->name('dashboard');
 
 Route::get('/', function () {
     return Redirect::to('/dashboard');
 });
 
-Route::controller(CountryController::class)->group(function () {
-    Route::post('/country', 'store')->middleware(['auth', 'verified'])->name('country.store');
-    Route::delete('/country/{country}', 'destroy')->middleware(['auth', 'verified'])->name('country.destroy');
+Route::controller(CountryController::class)->middleware(['auth', 'blockByIp'])->group(function () {
+    Route::post('/country', 'store')->name('country.store');
+    Route::delete('/country/{country}', 'destroy')->name('country.destroy');
 });
 
 require __DIR__.'/auth.php';
